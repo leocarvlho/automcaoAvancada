@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">automacaoAvancada</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="default_info_title">Localização padrão</string>
+    <string name="default_info_snippet">Nenhum lugar encontrado, porque a permissão de localização está desativada.</string>
+    <string name="valorInicial">0 km/h</string>
+    <string name="finaliza_corrida">finaliza corrida</string>
+    <string name="inicializa_corrida">inicializa corrida</string>
+    <string name="pesquisa_localizacao">pesquisa localização</string>
+    <string name="distancia_hint">0 km</string>
+    <string name="seleciona_carro">Seleciona carro</string>
+    <string name="tanque_combustivel_hint">00 L</string>
+    <string name="tempo_hint">00\'</string>
+</resources>

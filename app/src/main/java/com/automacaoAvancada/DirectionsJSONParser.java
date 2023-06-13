@@ -27,10 +27,10 @@ public class DirectionsJSONParser {
 
     private int distance;
 
-    /* Status code returned when the request succeeded */
+    /* Código de status retornado quando a solicitação foi bem-sucedida */
     private static final String OK = "OK";
 
-    /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
+    /** Recebe um JSONObject e retorna uma lista de listas contendo latitude e longitude */
     public final List<Route> parseString(JSONObject jObject) throws RouteException {
         List<Route> routes = new ArrayList<>();
 
@@ -44,36 +44,36 @@ public class DirectionsJSONParser {
 
             for (int i = 0; i < jsonRoutes.length(); i++) {
                 Route route = new Route();
-                //Create an empty segment
+                //Criar um segmento vazio
                 Segment segment = new Segment();
 
                 JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
-                //Get the bounds - northeast and southwest
+                //Obter os limites - nordeste e sudoeste
                 final JSONObject jsonBounds = jsonRoute.getJSONObject("bounds");
                 final JSONObject jsonNortheast = jsonBounds.getJSONObject("northeast");
                 final JSONObject jsonSouthwest = jsonBounds.getJSONObject("southwest");
 
                 route.setLatLgnBounds(new LatLng(jsonNortheast.getDouble("lat"), jsonNortheast.getDouble("lng")), new LatLng(jsonSouthwest.getDouble("lat"), jsonSouthwest.getDouble("lng")));
 
-                //Get the leg, only one leg as we don't support waypoints
+                //Obtem apenas uma leg, pois não suporta pontos de passagem
                 final JSONObject leg = jsonRoute.getJSONArray("legs").getJSONObject(0);
-                //Get the steps for this leg
+                //Obter os passos
                 final JSONArray steps = leg.getJSONArray("steps");
-                //Number of steps for use in for loop
+                //Número de etapas para uso no loop
                 final int numSteps = steps.length();
-                //Set the name of this route using the start & end addresses
+                //Definir o nome desta rota usando os endereços inicial e final
                 route.setName(leg.getString("start_address") + " to " + leg.getString("end_address"));
-                //Get google's copyright notice (tos requirement)
+                //Obter o aviso de direitos autorais do Google (requisito de tos)
                 route.setCopyright(jsonRoute.getString("copyrights"));
-                //Get distance and time estimation
+                //Obter a estimativa de distância e tempo
                 route.setDurationText(leg.getJSONObject("duration").getString("text"));
                 route.setDurationValue(leg.getJSONObject("duration").getInt(VALUE));
                 route.setDistanceText(leg.getJSONObject(DISTANCE).getString("text"));
                 route.setDistanceValue(leg.getJSONObject(DISTANCE).getInt(VALUE));
                 route.setEndAddressText(leg.getString("end_address"));
-                //Get the total length of the route.
+                //Obter o comprimento total da rota
                 route.setLength(leg.getJSONObject(DISTANCE).getInt(VALUE));
-                //Get any warnings provided (tos requirement)
+                //Obter todos os avisos fornecidos (requisito do tos)
                 if (!jsonRoute.getJSONArray("warnings").isNull(0)) {
                     route.setWarning(jsonRoute.getJSONArray("warnings").getString(0));
                 }
@@ -87,6 +87,7 @@ public class DirectionsJSONParser {
         return routes;
     }
 
+    // converter uma resposta que está em formato de fluxo de entrada em uma string legível
     private static String convertStreamToString(final InputStream input) {
         if (input == null) return null;
 
@@ -111,6 +112,9 @@ public class DirectionsJSONParser {
         return sBuf.toString();
     }
 
+    //Recebe um objeto JSONObject e retorna uma lista contendo latitude e longitude
+    //Desenha o trajeto
+    //Usa a classe Route
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
 
         List<List<HashMap<String, String>>> routes = new ArrayList<List<HashMap<String,String>>>() ;
@@ -122,22 +126,22 @@ public class DirectionsJSONParser {
 
             jRoutes = jObject.getJSONArray("routes");
 
-            /** Traversing all routes */
+            /** Percorrendo todas as rotas */
             for(int i=0;i<jRoutes.length();i++){
                 jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
                 List path = new ArrayList<HashMap<String, String>>();
 
-                /** Traversing all legs */
+                /** Percorrendo todas as legs */
                 for(int j=0;j<jLegs.length();j++){
                     jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
 
-                    /** Traversing all steps */
+                    /** Percorrendo todas as etapas */
                     for(int k=0;k<jSteps.length();k++){
                         String polyline = "";
                         polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
                         List list = decodePoly(polyline);
 
-                        /** Traversing all points */
+                        /** Percorrendo todos os pontos */
                         for(int l=0;l <list.size();l++){
                             HashMap<String, String> hm = new HashMap<String, String>();
                             hm.put("lat", Double.toString(((LatLng)list.get(l)).latitude) );
@@ -157,6 +161,7 @@ public class DirectionsJSONParser {
         return routes;
     }
 
+    //Percorre a sequência de caracteres, decodifica os valores e cria objetos
     private List decodePoly(String encoded) {
 
         List poly = new ArrayList();

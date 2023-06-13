@@ -32,6 +32,7 @@ public class Route implements Parcelable {
         segments = new ArrayList<>();
     }
 
+    //Cria uma nova instância de Route
     private Route(Parcel in) {
         name = in.readString();
 
@@ -202,6 +203,7 @@ public class Route implements Parcelable {
         return hashCode();
     }
 
+    //Escrever os valores dos campos no objeto Parcel
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
@@ -236,6 +238,7 @@ public class Route implements Parcelable {
         dest.writeParcelable(polyOptions, flags);
     }
 
+    //Criação de novas instâncias de Route a partir de um Parcel
     public static final Creator<Route> CREATOR = new Creator<Route>() {
         @Override
         public Route createFromParcel(Parcel in) {

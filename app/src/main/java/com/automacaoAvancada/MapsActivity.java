@@ -55,7 +55,8 @@ import com.automacaoAvancada.route.Route;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback { //Receber um callback quando o mapa estiver pronto para uso
+
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private GoogleMap map;
@@ -81,6 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private CountDownTimer countDownTimer;
     private long startTimeMillis;
     LocationListener locationListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -356,6 +358,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+    //Baixar os dados JSON da API Google Directions em segundo plano
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -371,6 +375,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             return data;
         }
 
+        //Analisar os dados JSON da API Google Directions e exibir a rota no mapa
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);

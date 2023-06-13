@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class Segment implements Parcelable {
+public class Segment implements Parcelable { //Permite a passagem de objetos do tipo Segment entre componentes do Android
     private LatLng start;
     private String instruction;
     private int length;
@@ -16,6 +16,7 @@ public class Segment implements Parcelable {
     public Segment() {
     }
 
+    //Criar uma nova instância de Segment a partir de um objeto do tipo Parcel
     private Segment(Parcel in) {
         start = in.readParcelable(LatLng.class.getClassLoader());
         instruction = in.readString();

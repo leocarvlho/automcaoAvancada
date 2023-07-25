@@ -1,5 +1,6 @@
 package com.automacaoAvancada;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.automacaoAvancada.utils.Constantes;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
@@ -79,6 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView textTempoDeslocamento;
     private TextView textDistanciaPercorrida;
     private ImageButton imageButtonIniciaTrajeto;
+    private Button btnCrosDockin;
     private CountDownTimer countDownTimer;
     private long startTimeMillis;
     LocationListener locationListener;
@@ -97,14 +101,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
 
         // Inicializa Places
-        Places.initialize(getApplicationContext(), "AIzaSyBGgkO6xusRHK_ryDFUu_HvcixyOFhLsEg");
+//        Places.initialize(getApplicationContext(), "AIzaSyBGgkO6xusRHK_ryDFUu_HvcixyOFhLsEg");
+        Places.initialize(getApplicationContext(), Constantes.API_KEY_MAPS);
 
         // Construir a FusedLocationProviderClient.
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Construa o mapa.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.mapCrosDock);
         mapFragment.getMapAsync(this);
 
         // Recupera os TextView
@@ -113,6 +118,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         textTempoChegada = findViewById(R.id.textTempoChegada);
         textTempoDeslocamento = findViewById(R.id.textTempoDeslocamento);
         textDistanciaPercorrida = findViewById(R.id.textDistanciaPercorrida);
+        btnCrosDockin = findViewById(R.id.btnCrosDockin);
         // Recupera ImageButton
         imageButtonIniciaTrajeto = findViewById(R.id.imageButtonIniciaTrajeto); //atributo da classe
         ImageButton imageButtonTerminaTrajeto = findViewById(R.id.imageButtonTerminaTrajeto); //atributo do metodo
@@ -132,6 +138,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // TODO: Ainda precisa ser implementado
             }
         });
+
 
         // Fica escutando se o botão de encerrar foi clicado
         imageButtonTerminaTrajeto.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +165,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 textVelocidade.setText(String.format("%.2f km/h", velocidadeKmPorHora));
             }
         };
+
+        btnCrosDockin.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CrossDocking.class);
+            startActivity(intent);
+        });
 
         // Recupera o Botão de Pesquisar Localização
         AutocompleteSupportFragment searchLocation = (AutocompleteSupportFragment)

@@ -9,8 +9,8 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent">
 
-        <fragment
-            android:id="@+id/map"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mapCrosDock"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -116,6 +116,16 @@
             android:contentDescription="@string/finaliza_corrida"
             app:srcCompat="@drawable/baseline_close_24" />
 
+        <Button
+            android:id="@+id/btnCrosDockin"
+            android:layout_width="115dp"
+            android:layout_height="62dp"
+            android:layout_above="@+id/imageButtonIniciaTrajeto"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Cross" />
+
         <LinearLayout
             android:id="@+id/searchContainer"
             android:layout_width="64dp"
@@ -127,7 +137,7 @@
             android:background="@drawable/ic_search_background"
             android:orientation="horizontal">
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/searchLocation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

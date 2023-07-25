@@ -11,4 +11,5 @@
     <string name="seleciona_carro">Seleciona carro</string>
     <string name="tanque_combustivel_hint">00 L</string>
     <string name="tempo_hint">00\'</string>
+    <string name="title_activity_cross_docking">CrossDocking</string>
 </resources>

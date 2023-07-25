@@ -13,11 +13,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.automacaoAvancada"
         tools:targetApi="31">
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
 
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBGgkO6xusRHK_ryDFUu_HvcixyOFhLsEg" />
-
+            android:value="AIzaSyBzrWZg-hK7UAohFS3KsJbGCMeByd1S6jY" /> <!-- android:value="AIzaSyDbGeP9DNZZSI19ZgfaUUVBQmwzeE2P978" /> -->
+        <activity
+            android:name=".CrossDocking"
+            android:exported="false"
+            android:label="@string/title_activity_cross_docking" />
+        <activity
+            android:name=".CrossDockingDetail"
+            android:exported="false"
+            android:label="@string/title_activity_cross_docking" />
         <activity
             android:name=".MapsActivity"
             android:exported="true"

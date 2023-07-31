@@ -9,7 +9,7 @@ import Jama.Matrix;
 
 public class CalculoCrossDockImpl implements CalculoCrosDockingService {
 
-    public ResponseCrossDocking calcula(long distanciaCarro1, long distanciaCarro2, int velocidadeCarro1, int velocidadeCarro2, int c1, int c2, long distInicial1, long distInicial2) {
+    public ResponseCrossDocking calcula(long distanciaCarro1, long distanciaCarro2, int velocidadeCarro1, int velocidadeCarro2, long distInicial1, long distInicial2) {
         ResponseCrossDocking response = new ResponseCrossDocking();
 
         System.out.println("Distancia carro1: "+distanciaCarro1 + " km");
@@ -32,46 +32,11 @@ public class CalculoCrossDockImpl implements CalculoCrosDockingService {
 
         response.setTempoEstimadoEncontro(tempoEstimado);
 
-        //Reconcilia os dados
-        double[][] y1 = {{distInicial1}, {distInicial1-c1}, {distInicial1-c1}, {distInicial1-c1}, {distInicial1-c1}};
-        double[][] a1 = {{1}, {-1}, {-1}, {-1}, {-1}};
-        double[][] v1 = {{1,0,0,0,0},{0,1,0,0,0},{0,0,1,0,0},{0,0,0,1,0},{0,0,0,0,1}};
-        Matrix Y1 = new Matrix(y1);
-        Matrix A1 = new Matrix(a1);
-        Matrix V1 = new Matrix(v1);
-        Matrix dadosRec1 = reconciliation(Y1, A1, V1);
+        // Velocidade média inicial para o carro 1
+        double velocidadeMediaCarro1 = distInicial1/tempoEstimado;
 
-        double[][] y2 = {{distInicial2}, {distInicial2-c2}, {distInicial2-c2}, {distInicial2-c2}, {distInicial2-c2}};
-        double[][] a2 = {{1}, {-1}, {-1}, {-1}, {-1}};
-        double[][] v2 = {{1,0,0,0,0},{0,1,0,0,0},{0,0,1,0,0},{0,0,0,1,0},{0,0,0,0,1}};
-        Matrix Y2 = new Matrix(y2);
-        Matrix A2 = new Matrix(a2);
-        Matrix V2 = new Matrix(v2);
-        Matrix dadosRec2 = reconciliation(Y2, A2, V2);
-
-        // Velocidade indicada para o carro 1
-        double dadoRec1 = dadosRec1.get(2,1);
-        double distAjustada1;
-        if (distanciaCarro1>dadoRec1){
-            distAjustada1 = distanciaCarro1-dadoRec1;
-        }
-        else{
-            distAjustada1 = distanciaCarro1+dadoRec1;
-        }
-
-        double velocidadeMediaCarro1 = distAjustada1/tempoEstimado;
-
-        // Velocidade indicada para o carro 2
-        double dadoRec2 = dadosRec2.get(2,1);
-        double distAjustada2;
-        if (distanciaCarro2>dadoRec2){
-            distAjustada2 = distanciaCarro2-dadoRec2;
-        }
-        else{
-            distAjustada2 = distanciaCarro2+dadoRec2;
-        }
-
-        double velocidadeMediaCarro2 = distAjustada2/tempoEstimado;
+        // Velocidade média inicial para o carro 2
+        double velocidadeMediaCarro2 = distInicial2/tempoEstimado;
 
         response.setVelocidadeMediaCarro1(velocidadeMediaCarro1);
         response.setVelocidadeMediaCarro2(velocidadeMediaCarro2);
@@ -95,9 +60,7 @@ public class CalculoCrossDockImpl implements CalculoCrosDockingService {
         Matrix res = y.minus(XAY);
 
         return res;
-
     }
-
 
     @Override
     public ResponseCrossDocking calcula(long distanciaCarro1, long distanciaCarro2, int velocidadeCarro1, int velocidadeCarro2) {

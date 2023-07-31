@@ -1,17 +1,15 @@
 package com.automacaoAvancada;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+
+import com.automacaoAvancada.databinding.ActivityCrossDockingBinding;
 import com.automacaoAvancada.model.CrossDockingModel;
 import com.automacaoAvancada.utils.Constantes;
 import com.automacaoAvancada.utils.Utils;
@@ -22,7 +20,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.automacaoAvancada.databinding.ActivityCrossDockingBinding;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
@@ -43,23 +40,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class CrossDocking extends FragmentActivity implements OnMapReadyCallback {
+public class CrossDocking extends FragmentActivity implements OnMapReadyCallback { //suportar fragmentos
 
-    private GoogleMap mMap;
+    private GoogleMap mMap; //instância da classe GoogleMap (usada p/ interagir com o mapa exibido na UI do aplicativo)
+
     private ActivityCrossDockingBinding binding;
+    //instância de ActivityCrossDockingBinding (representa o layout XML associado a atividade)
 
     private AutocompleteSupportFragment autocompleteFragment1;
     private AutocompleteSupportFragment autocompleteFragment2;
     private AutocompleteSupportFragment autocompleteFragmentDestino;
+    //instâncias de AutocompleteSupportFragment (facilitar a pesquisa de endereços)
+
     private LatLng origem1;
     private LatLng origem2;
     private LatLng destino;
     private Button btnTracarRota;
     private Button btnIniciarCrossDock;
-    private CrossDockingModel crossDockingModel;
+    //objetos Button que (botões na interface do usuário)
+    private CrossDockingModel crossDockingModel; //instância da classe CrossDockingModel
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //configura a interface e inicializa os componentes importantes
         super.onCreate(savedInstanceState);
 
         binding = ActivityCrossDockingBinding.inflate(getLayoutInflater());
@@ -74,10 +76,10 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
 
         Places.initialize(getApplicationContext(), Constantes.API_KEY_MAPS);
         if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
+            mapFragment.getMapAsync(this); //obtem uma instância do mapa
         }
 
-        btnTracarRota.setOnClickListener(v->{
+        btnTracarRota.setOnClickListener(v->{ //botão listener
             tracarRotas();
         });
         btnIniciarCrossDock.setOnClickListener(view -> {
@@ -97,6 +99,7 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
         autocompleteFragmentDestino = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.idDestino);
 
+        ////configura os listeners dos AutocompleteSupportFragment
         autocompleteFragment1.setHint("Pesquisa de endereço 1");
         autocompleteFragment2.setHint("Pesquisa de endereço 2");
         autocompleteFragmentDestino.setHint("Pesquisa de Destino");
@@ -105,20 +108,17 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
         autocompleteFragment2.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG));
         autocompleteFragmentDestino.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG));
 
-
+        //armazena origem1, origem2 e destino e cria marcadores no mapa
         preencheMapa();
-
     }
 
-
-
-    private void mudarTela() {
-        Intent intent = new Intent(this, CrossDockingDetail.class);
+    private void mudarTela() { //inicia a atividade CrossDockingDetail
+        Intent intent = new Intent(this, CrossDockingDetail.class); //parâmetro extra na Intent
         intent.putExtra("crossDockModel", crossDockingModel);
         startActivity(intent);
     }
 
-    private void preencheMapa(){
+    private void preencheMapa(){ //configura os listeners para capturar as loc dadas pelo usuário
 
         float zoomLevel = 15.0f;
         float zoomLevelDestino = 100.0f;
@@ -172,10 +172,12 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
 
 
 
-    private void tracarRotas(){
+    private void tracarRotas(){ //chamado quando o botão btnTracarRota é pressionado
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyAX64wzJZBPbpiYgzzBx0TYmLsoeCYPIgY")
                 .build();
+
+        //verifica se as coord foram definidas corretamente:
         if(origem1 == null){
             Utils.showErrorMessageDialog(this, "É necessário definir o endereço da origem 1 para continuar !");
             return;
@@ -193,7 +195,7 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
         crossDockingModel.setVelocidadeCarro2(30);
         crossDockingModel.setVelocidadeCarro1(40);
 
-        //Solicitação para a primeira rota
+        //Solicitação para a primeira rota:
         DirectionsApiRequest request1 = DirectionsApi.newRequest(context)
                 .mode(TravelMode.DRIVING)
                 .units(Unit.METRIC)
@@ -201,7 +203,7 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
                 .destination(destino.latitude + "," + destino.longitude);
 
 
-        //Solicitação para a segunda rota
+        //Solicitação para a segunda rota:
         DirectionsApiRequest request2 = DirectionsApi.newRequest(context)
                 .mode(TravelMode.DRIVING)
                 .units(Unit.METRIC)
@@ -233,7 +235,7 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void processarResultadoRota(DirectionsResult result) {
+    private void processarResultadoRota(DirectionsResult result) { //extrai as coord da rota a partir do result
         if (result.routes != null && result.routes.length > 0) {
 
             com.google.maps.model.LatLng[] path = result.routes[0].overviewPolyline.decodePath().toArray(new com.google.maps.model.LatLng[0]);
@@ -273,6 +275,7 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
     }
 
     private boolean isCoordenadaIgual(com.google.maps.model.LatLng coordenada1, LatLng coordenada2, double tolerance) {
+        //verifica se duas coordenadas (lat e long) são iguais
         double latDiff = Math.abs(coordenada1.lat - coordenada2.latitude);
         double lngDiff = Math.abs(coordenada1.lng - coordenada2.longitude);
         return latDiff < tolerance && lngDiff < tolerance;
@@ -282,10 +285,10 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap) { //chamado quando o mapa está pronto
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+        // Add um marcador no mapa
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));

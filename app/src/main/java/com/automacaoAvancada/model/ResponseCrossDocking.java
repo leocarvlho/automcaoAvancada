@@ -7,6 +7,7 @@ public class ResponseCrossDocking {
     double tempoEstimadoEncontro;
     boolean carro2chegouPrimeiro = false;
 
+    //representa uma resposta relacionada ao cenário de cross docking:
     public ResponseCrossDocking(double velocidadeMediaCarro1, double velocidadeMediaCarro2, double tempoEstimadoEncontro, boolean carro2chegouPrimeiro) {
         this.velocidadeMediaCarro1 = velocidadeMediaCarro1;
         this.velocidadeMediaCarro2 = velocidadeMediaCarro2;

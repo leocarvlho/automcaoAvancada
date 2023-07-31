@@ -49,5 +49,8 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:3.2.0'
     implementation 'com.google.maps:google-maps-services:0.19.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20"
+    implementation group: 'org.ejml', name: 'ejml-core', version: '0.41'
+    implementation group: 'gov.nist.math', name: 'jama', version: '1.0.3'
+
 }
 

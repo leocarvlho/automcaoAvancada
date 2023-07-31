@@ -10,20 +10,21 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-public class CryptUtils {
+public class CryptUtils { //criptografar e descriptografar textos
 
-    private static final String AES_ALGORITHM = "AES";
+    private static final String AES_ALGORITHM = "AES"; // criptografia simétrica (algoritmo de criptografía AES)
     private static final String AES_TRANSFORMATION = "AES/ECB/PKCS5Padding"; // Modo ECB (Electronic CodeBook) com preenchimento PKCS5
 
     // Chave de criptografia (tamanho fixo de 128 bits = 16 bytes)
-    private static final String SECRET_KEY = "8036c15601b601431d349fb46180536a"; // Altere isso para a sua chave
+    private static final String SECRET_KEY = "8036c15601b601431d349fb46180536a"; //chave secreta usada para criptografar e descriptografar os dados
 
     // Método para criptografar o texto
 
-    public static String generateAESKey() {
+    public static String generateAESKey() { // gerar uma nova chave AES utilizando a classe KeyGenerator (pacote javax.crypto)
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
             keyGenerator.init(128); // Tamanho da chave em bits (pode ser 128, 192 ou 256)
+            //chave é gerada aleatoriamente
             SecretKey secretKey = keyGenerator.generateKey();
             byte[] encodedKey = secretKey.getEncoded();
             return bytesToHex(encodedKey);
@@ -42,9 +43,9 @@ public class CryptUtils {
         return result.toString();
     }
 
-    public static String encrypt(String plaintext) {
+    public static String encrypt(String plaintext) { //criptografa o texto fornecido como argumento usando a chave secreta
         try {
-            byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8);
+            byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8); //obtém os bytes da chave secreta
             SecretKey secretKey = new SecretKeySpec(keyBytes, AES_ALGORITHM);
 
             Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);

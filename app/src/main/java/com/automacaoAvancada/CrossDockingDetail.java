@@ -1,29 +1,26 @@
 package com.automacaoAvancada;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.automacaoAvancada.model.CrossDockingModel;
 import com.automacaoAvancada.model.ResponseCrossDocking;
-import com.automacaoAvancada.service.impl.CalculoCrosDockingService;
 import com.automacaoAvancada.service.impl.impl.CalculoCrossDockImpl;
-import com.automacaoAvancada.utils.CryptUtils;
 import com.automacaoAvancada.utils.DialogMessage;
 import com.automacaoAvancada.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class CrossDockingDetail extends AppCompatActivity {
     private CrossDockingModel crossDockingModel;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //inicializar a tela e interações com o usuário
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.cross_docking_detail);
@@ -59,15 +56,54 @@ public class CrossDockingDetail extends AppCompatActivity {
 
         idListaPassageiro.setText(passageiros.get(0)+", "+passageiros.get(1));
 
+        double distInicial1 = crossDockingModel.getDistanciaCarro1();
+        double distInicial2 = crossDockingModel.getDistanciaCarro2();
+        int medidorC1 = 0;
+        int medidorC2 = 0;
+
         CalculoCrossDockImpl crosImpl =new CalculoCrossDockImpl();
         ResponseCrossDocking response = crosImpl.calcula(crossDockingModel.getDistanciaCarro1(),
                 crossDockingModel.getDistanciaCarro2(),
                 crossDockingModel.getVelocidadeCarro1(),
-                crossDockingModel.getVelocidadeCarro2()
-                );
+                crossDockingModel.getVelocidadeCarro2(),
+                medidorC1,
+                medidorC2,
+                (long) distInicial1,
+                (long) distInicial2
+        );
 
-        textVelocidade1.setText("Velocidade média necessária do carro 1: "+ (int) response.getVelocidadeMediaCarro1() +" km/h");
-        textVelocidade2.setText("Velocidade média necessária do carro 2: "+ (int) response.getVelocidadeMediaCarro2() +" km/h");
+        int i = 0;
+
+        while (crossDockingModel.getDistanciaCarro1()<0 && crossDockingModel.getDistanciaCarro2()<0){
+
+            double dist1 = crossDockingModel.getDistanciaCarro1();
+            double dist2 = crossDockingModel.getDistanciaCarro2();
+            double distIdeal1 = distInicial1-i;
+            double distIdeal2 = distInicial2-i;
+
+            CalculoCrossDockImpl crosImplA =new CalculoCrossDockImpl();
+            ResponseCrossDocking responseA = crosImplA.calcula(crossDockingModel.getDistanciaCarro1(),
+                    crossDockingModel.getDistanciaCarro2(),
+                    crossDockingModel.getVelocidadeCarro1(),
+                    crossDockingModel.getVelocidadeCarro2(),
+                    medidorC1,
+                    medidorC2,
+                    (long) distInicial1,
+                    (long) distInicial2
+            );
+
+            if(crossDockingModel.getDistanciaCarro1() == distInicial1-1){
+                textVelocidade1.setText("Velocidade média necessária do carro 1: "+ (int) responseA.getVelocidadeMediaCarro1() +" km/h");
+                medidorC1++;
+            }
+            if(crossDockingModel.getDistanciaCarro2() == distInicial2-1){
+                textVelocidade2.setText("Velocidade média necessária do carro 2: "+ (int) responseA.getVelocidadeMediaCarro2() +" km/h");
+                medidorC2++;
+            }
+        }
+
+        //textVelocidade1.setText("Velocidade média necessária do carro 1: "+ (int) response.getVelocidadeMediaCarro1() +" km/h");
+        //textVelocidade2.setText("Velocidade média necessária do carro 2: "+ (int) response.getVelocidadeMediaCarro2() +" km/h");
         tempoestimadoId.setText("Tempo estimado para o encontro "+response.getTempoEstimadoEncontro() +" horas");
         idFimViagem.setText(Utils.dataAgora(response.getTempoEstimadoEncontro()));
 
@@ -81,6 +117,4 @@ public class CrossDockingDetail extends AppCompatActivity {
         });
 
     }
-
-
 }

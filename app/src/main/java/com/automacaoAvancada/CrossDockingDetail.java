@@ -81,9 +81,6 @@ public class CrossDockingDetail extends AppCompatActivity {
         CalculoCross carro1 = new CalculoCross(crossDockingModel.getDistanciaCarro1(), crossDockingModel.getVelocidadeCarro1(), medidorC1, distInicial1, tEstimado);
         CalculoCross carro2 = new CalculoCross(crossDockingModel.getDistanciaCarro2(), crossDockingModel.getVelocidadeCarro2(), medidorC2, distInicial2, tEstimado);
 
-        carro1.run();
-        carro2.run();
-
         floatingActionButton.setOnClickListener(v->{
 
             String txt = "Por favor "+idNomeMotorista2.getText()+" preciso que você siga a uma velocidade média de "+(int) response.getVelocidadeMediaCarro2()+
@@ -92,6 +89,12 @@ public class CrossDockingDetail extends AppCompatActivity {
             DialogMessage dialogMessage = new DialogMessage(this);
             dialogMessage.show(txt);
         });
+
+        while (crossDockingModel.getDistanciaCarro1()>0 && crossDockingModel.getDistanciaCarro2()>0)
+        {
+            carro1.run();
+            carro2.run();
+        }
 
     }
 }

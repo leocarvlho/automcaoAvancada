@@ -64,8 +64,8 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) { //configura a interface e inicializa os componentes importantes
         super.onCreate(savedInstanceState);
 
-        binding = ActivityCrossDockingBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = ActivityCrossDockingBinding.inflate(getLayoutInflater()); //instância da classe ActivityCrossDockingBinding
+        setContentView(binding.getRoot());                                  //layout XML associado a essa atividade
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
@@ -90,6 +90,7 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
             mudarTela();
         });
 
+        //instâncias de AutocompleteSupportFragment (pesquisa de lugares, Google Places)
         autocompleteFragment1 = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.idOrigem1);
 
@@ -99,7 +100,7 @@ public class CrossDocking extends FragmentActivity implements OnMapReadyCallback
         autocompleteFragmentDestino = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.idDestino);
 
-        ////configura os listeners dos AutocompleteSupportFragment
+        //configura os listeners dos AutocompleteSupportFragment
         autocompleteFragment1.setHint("Pesquisa de endereço 1");
         autocompleteFragment2.setHint("Pesquisa de endereço 2");
         autocompleteFragmentDestino.setHint("Pesquisa de Destino");

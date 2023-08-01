@@ -95,6 +95,5 @@ public class CrossDockingDetail extends AppCompatActivity {
             carro1.run();
             carro2.run();
         }
-
     }
 }

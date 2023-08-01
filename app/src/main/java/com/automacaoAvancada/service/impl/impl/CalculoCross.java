@@ -11,7 +11,10 @@ public class CalculoCross implements  Runnable{
     private int c1;
     private final double distInicial1;
     private final double tEstimado;
-
+    int i = 1;
+    int j = 1;
+    double media = 0;
+    double soma = 0;
 
     public CalculoCross(double distanciaCarro1, double velocidadeCarro1, int c1, double distInicial1, double tEstimado){
         this.distanciaCarro1 = distanciaCarro1;
@@ -34,7 +37,7 @@ public class CalculoCross implements  Runnable{
         //Reconcilia os dados
         double[][] y1 = {{distInicial1}, {distanciaCarro1}, {distanciaCarro1-c1-c1}, {distanciaCarro1-c1-c1}, {distanciaCarro1-c1-c1}};
         double[][] a1 = {{1}, {-1}, {-1}, {-1}, {-1}};
-        double[][] v1 = {{1,0,0,0,0},{0,1,0,0,0},{0,0,1,0,0},{0,0,0,1,0},{0,0,0,0,1}};
+        double[][] v1 = {{1,0,0,0,0},{0,i,0,0,0},{0,0,i,0,0},{0,0,0,i,0},{0,0,0,0,i}};
         Matrix Y1 = new Matrix(y1);
         Matrix A1 = new Matrix(a1);
         Matrix V1 = new Matrix(v1);
@@ -58,6 +61,11 @@ public class CalculoCross implements  Runnable{
         System.out.println("Velocidade indicada para o carro: " + velocidadeMediaCarro1 + " km/h");
 
         c1++;
+        soma += distAjustada1;
+        media += (soma/j);
+        double a = (distAjustada1-media)*(distAjustada1-media);
+        i+=a;
+        j++;
 
         double intervalo = ((3.6e+6)/velocidadeMediaCarro1);
         try {
@@ -65,7 +73,6 @@ public class CalculoCross implements  Runnable{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public static Matrix reconciliation(Matrix y, Matrix a, Matrix v){
